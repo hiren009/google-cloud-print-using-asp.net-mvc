@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "All Printers";
+    var allPrinters = (List<KeyValuePair<string,string>>) ViewBag.allPrinters;
+}
+
+<div class="jumbotron">
+    <h1>All Printers</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <ul>
+            @foreach (var itmPrinter in allPrinters)
+            {
+                <li>@itmPrinter.Key -- @itmPrinter.Value</li>
+            }
+        </ul>
+    </div>
+</div>

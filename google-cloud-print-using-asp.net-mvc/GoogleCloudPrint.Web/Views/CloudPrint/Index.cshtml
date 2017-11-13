@@ -1,0 +1,68 @@
+﻿@model GoogleCloudPrint.Web.Models.PrinterModel
+@{
+    ViewBag.Title = "Cloud Print";
+
+    GoogleCloudPrint.Web.Models.PageResponse oResp = null;
+    if (ViewBag.PageResp != null)
+    {
+        oResp = (GoogleCloudPrint.Web.Models.PageResponse)ViewBag.PageResp;
+    }
+}
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#isPrintFromUrl").change(handlePrintTypeChange);
+        });
+
+        function handlePrintTypeChange() {
+            if ($("#isPrintFromUrl").is(":checked")) {
+                $("#divUrl").show();
+                $("#divUploadFile").hide();
+            }
+            else {
+                $("#divUrl").hide();
+                $("#divUploadFile").show();
+            }
+        }
+    </script>
+}
+
+<h2>Cloud Print</h2>
+
+@if (oResp != null)
+{
+    if (oResp.isSuccess)
+    {
+        <p class="alert alert-success">@oResp.cMessage</p>
+    }
+    else
+    {
+        <p class="alert alert-danger">@oResp.cMessage</p>
+    }
+}
+
+@using (Html.BeginForm("IndexPost", "CloudPrint", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    <div class="form-group">
+        <label>Printer:</label>
+        @Html.DropDownListFor(x => x.PrinterId, (List<SelectListItem>)ViewBag.PrinterList, "Select", new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.PrinterId)
+    </div>
+    <div class="form-group">
+        <label>Print Title:</label>
+        @Html.TextBoxFor(x => x.title, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.title)
+    </div>
+    <div class="checkbox">
+        <label> @Html.CheckBoxFor(x => x.isPrintFromUrl) Is Print From Url</label>
+    </div>
+    <div id="divUrl" style="display:none;" class="form-group">
+        <label>Url:</label>
+        @Html.TextBoxFor(x => x.url, new { @class = "form-control" })
+    </div>
+    <div id="divUploadFile" class="form-group">
+        <label>Upload File:</label>
+        <input id="fileUpload" name="fileUpload" type="file" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Print</button>
+}

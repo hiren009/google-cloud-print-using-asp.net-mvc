@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Add Printer Id";
+
+    GoogleCloudPrint.Web.Models.PageResponse oResp = null;
+    if (ViewBag.PageResp != null)
+    {
+        oResp = (GoogleCloudPrint.Web.Models.PageResponse)ViewBag.PageResp;
+    }
+}
+
+<h2>Add Printer Id</h2>
+
+@if (oResp != null)
+{
+    if (oResp.isSuccess)
+    {
+        <p class="alert alert-success">@oResp.cMessage</p>
+    }
+    else
+    {
+        <p class="alert alert-danger">@oResp.cMessage</p>
+    }
+}
+
+<div class="row">
+    <div class="col-md-12 form-inline">
+        @using (Html.BeginForm("IndexPost", "AcceptPendingInvites",FormMethod.Post))
+        {
+            <input type="text" class="form-control" required name="printerId" value="" />
+            <input type="submit" class="btn btn-primary" value="Add Printer" />
+        }
+    </div>
+</div>
